@@ -1,0 +1,11 @@
+market_name,county,latitude,longitude,type
+Wakulima Market,Nairobi,-1.2833,36.8360,wholesale
+City Market,Nairobi,-1.2885,36.8227,retail
+Gikomba Market,Nairobi,-1.2900,36.8480,secondhand_wholesale
+Eldoret Wholesale,Uasin Gishu,0.5143,35.2698,wholesale
+Kitale Market,Trans-Nzoia,1.0154,35.0062,wholesale
+Kisumu Main Market,Kisumu,-0.1022,34.7617,retail
+Nakuru Market,Nakuru,-0.3031,36.0800,retail
+Mombasa Kongowea,Mombasa,-4.0130,39.6682,wholesale
+Nyeri Central Market,Nyeri,-0.4167,36.9500,retail
+Embu Market,Embu,-0.5333,37.4500,retail
