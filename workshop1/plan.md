@@ -1,7 +1,7 @@
 # Workshop 1 — Introduction to Neo4j & Graph Databases
 
 **Kenya AI Challenge 2026 — Neo4j Track**
-**Date:** Saturday, 23 May 2026 · 2:00 PM – 5:00 PM
+**Date:** Saturday, 23 May 2026 · 2:20 PM – 5:50 PM
 
 ---
 
@@ -22,15 +22,16 @@ By the end of this workshop, you will be able to:
 
 | Time | Topic |
 |---|---|
-| 2:00 – 2:09 | Opening |
-| 2:09 – 2:36 | Graph Concepts & Cypher Introduction |
-| 2:36 – 2:56 | Exercise 1: Neo4j Aura Setup |
-| 2:56 – 3:26 | Exercise 2: Build a Mini Market Graph |
-| 3:26 – 3:56 | Exercise 3: Query the Graph |
-| 3:56 – 4:26 | Exercise 4: Importing Data from CSV |
-| 4:26 – 4:33 | Buffer / Q&A |
-| 4:33 – 4:51 | Design Your Hackathon Graph |
-| 4:51 – 5:00 | Wrap-up & Feedback |
+| 2:20 – 2:25 | Welcome & Introductions |
+| 2:25 – 2:33 | Opening |
+| 2:33 – 3:05 | Graph Concepts, Relational → Graph, & Cypher |
+| 3:05 – 3:25 | Exercise 1: Neo4j Aura Setup *(guided)* |
+| 3:25 – 3:50 | Exercise 2: Build a Mini Market Graph *(guided)* |
+| 3:50 – 4:10 | **Break — pizza, water, networking** |
+| 4:10 – 4:45 | Exercise 3: Query the Graph *(hands-on)* |
+| 4:45 – 5:05 | Exercise 4: Importing Data from CSV *(hands-on)* |
+| 5:05 – 5:30 | Design Your Hackathon Graph |
+| 5:30 – 5:50 | Kahoot, Q&A & Key Takeaways |
 
 ---
 
@@ -68,7 +69,49 @@ Answering *"which buyers purchase crops grown by farmers in Kisumu County?"* req
 
 ---
 
-## 2. Cypher — Neo4j's Query Language
+## 2. From Relational to Graph
+
+If you have worked with a relational database before, the translation is straightforward:
+
+| Relational | Graph |
+|---|---|
+| Table | Node label |
+| Row | Node |
+| Column | Property |
+| Foreign key | Relationship |
+| Join table | Direct relationship (with properties if needed) |
+
+### Example
+
+A relational schema for market prices might look like this:
+
+```
+farmers   (id, name, county)
+crops     (id, name, unit)
+farmer_crops  (farmer_id, crop_id)          ← join table
+markets   (id, name, county)
+prices    (crop_id, market_id, price, date) ← join table with data
+```
+
+The same model as a graph:
+
+```
+(Farmer)-[:GROWS]->(Crop)
+(Crop)-[:LISTED_AT {price: 3100, date: "2026-05-20"}]->(Market)
+```
+
+The join tables disappear. The relationship carries the data directly. Queries that required multiple JOINs become a single Cypher pattern.
+
+### When to make the switch
+
+Consider moving from relational to graph when:
+- Your queries require 3 or more JOINs to answer a common question
+- You need to traverse chains of connections (friends of friends, supply chain hops, multi-step recommendations)
+- The relationships themselves carry meaningful data (price, date, quantity, weight)
+
+---
+
+## 3. Cypher — Neo4j's Query Language
 
 Cypher lets you query and update a graph by drawing the pattern you want to find. The syntax mirrors the graph itself.
 
@@ -144,5 +187,5 @@ Full exercise steps and Cypher queries are in **[exercise-handout.md](exercise-h
 
 1. **Keep your Aura instance** — you will use it in Workshop 2 on June 6
 2. **Save your credentials** — the password cannot be recovered if lost
-3. **Before Workshop 2:** Add at least 5 nodes relevant to your own project idea
+3. **Before Workshop 2:** Add at least 5 nodes relevant to your own project idea and try writing one query against them
 4. **Office hours** — watch WhatsApp for the schedule; bring your graph design questions
