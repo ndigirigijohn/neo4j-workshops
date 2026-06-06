@@ -62,18 +62,17 @@ SET lake.county = "Kisumu", lake.type = "Exporter";
 
 // ── STEP 5: GROWS relationships ──────────────────────────────
 
-MATCH (f:Farm {name: "Kamau Farm"}),    (c:Crop {name: "Maize"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Kamau Farm"}),    (c:Crop {name: "Tomatoes"}) MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Kamau Farm"}),    (c:Crop {name: "Potatoes"}) MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Wanjiku Farm"}),  (c:Crop {name: "Maize"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Wanjiku Farm"}),  (c:Crop {name: "Beans"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Auma Farm"}),     (c:Crop {name: "Tomatoes"}) MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Auma Farm"}),     (c:Crop {name: "Beans"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Auma Farm"}),     (c:Crop {name: "Avocado"})  MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Maina Farm"}),    (c:Crop {name: "Maize"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Maina Farm"}),    (c:Crop {name: "Potatoes"}) MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Nafula Farm"}),   (c:Crop {name: "Maize"})    MERGE (f)-[:GROWS]->(c)
-MATCH (f:Farm {name: "Nafula Farm"}),   (c:Crop {name: "Beans"})    MERGE (f)-[:GROWS]->(c);
+UNWIND [
+  {farm: "Kamau Farm", crops: ["Maize", "Tomatoes", "Potatoes"]},
+  {farm: "Wanjiku Farm", crops: ["Maize", "Beans"]},
+  {farm: "Auma Farm", crops: ["Tomatoes", "Beans", "Avocado"]},
+  {farm: "Maina Farm", crops: ["Maize", "Potatoes"]},
+  {farm: "Nafula Farm", crops: ["Maize", "Beans"]}
+] AS row
+MATCH (f:Farm {name: row.farm})
+MATCH (c:Crop) WHERE c.name IN row.crops
+MERGE (f)-[:GROWS]->(c);
+
 
 
 // ── STEP 6: LISTED_AT relationships (flat model — to be refactored) ──
