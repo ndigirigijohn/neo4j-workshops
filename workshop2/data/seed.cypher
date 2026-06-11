@@ -77,47 +77,47 @@ MERGE (f)-[:GROWS]->(c);
 
 // ── STEP 6: LISTED_AT relationships (flat model — to be refactored) ──
 
-MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Wakulima Market"})  MERGE (c)-[:LISTED_AT {price: 2400, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 3100, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 2600, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Nakuru Market"})    MERGE (c)-[:LISTED_AT {price: 2900, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Kitale Market"})    MERGE (c)-[:LISTED_AT {price: 2800, date: "2026-06-06"}]->(m)
+MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Wakulima Market"})   MERGE (c)-[:LISTED_AT {price: 2400, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 3100, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 2600, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Nakuru Market"})     MERGE (c)-[:LISTED_AT {price: 2900, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Maize"}),    (m:Market {name: "Kitale Market"})     MERGE (c)-[:LISTED_AT {price: 2800, date: "2026-06-06"}]->(m);
 
-MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Wakulima Market"})  MERGE (c)-[:LISTED_AT {price: 110, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 85, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Nakuru Market"})    MERGE (c)-[:LISTED_AT {price: 95, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 100, date: "2026-06-06"}]->(m)
+MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Wakulima Market"})   MERGE (c)-[:LISTED_AT {price: 110,  date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 85,   date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Nakuru Market"})     MERGE (c)-[:LISTED_AT {price: 95,   date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Tomatoes"}), (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 100,  date: "2026-06-06"}]->(m);
 
-MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Wakulima Market"})  MERGE (c)-[:LISTED_AT {price: 7200, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 8500, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Kitale Market"})    MERGE (c)-[:LISTED_AT {price: 7800, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Nakuru Market"})    MERGE (c)-[:LISTED_AT {price: 7500, date: "2026-06-06"}]->(m)
+MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Wakulima Market"})   MERGE (c)-[:LISTED_AT {price: 7200, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 8500, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Kitale Market"})     MERGE (c)-[:LISTED_AT {price: 7800, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Beans"}),    (m:Market {name: "Nakuru Market"})     MERGE (c)-[:LISTED_AT {price: 7500, date: "2026-06-06"}]->(m);
 
-MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Wakulima Market"})  MERGE (c)-[:LISTED_AT {price: 2600, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Nakuru Market"})    MERGE (c)-[:LISTED_AT {price: 2200, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 2400, date: "2026-06-06"}]->(m)
+MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Wakulima Market"})   MERGE (c)-[:LISTED_AT {price: 2600, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Nakuru Market"})     MERGE (c)-[:LISTED_AT {price: 2200, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Potatoes"}), (m:Market {name: "Eldoret Wholesale"}) MERGE (c)-[:LISTED_AT {price: 2400, date: "2026-06-06"}]->(m);
 
-MATCH (c:Crop {name: "Avocado"}),  (m:Market {name: "Wakulima Market"})  MERGE (c)-[:LISTED_AT {price: 120, date: "2026-06-06"}]->(m)
-MATCH (c:Crop {name: "Avocado"}),  (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 90, date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Avocado"}),  (m:Market {name: "Wakulima Market"})   MERGE (c)-[:LISTED_AT {price: 120,  date: "2026-06-06"}]->(m);
+MATCH (c:Crop {name: "Avocado"}),  (m:Market {name: "Kisumu Main Market"}) MERGE (c)-[:LISTED_AT {price: 90,   date: "2026-06-06"}]->(m);
 
 
 // ── STEP 7: BUYS relationships ───────────────────────────────
 
-MATCH (b:Buyer {name: "Meghan Wares Ltd"}),      (c:Crop {name: "Tomatoes"}) MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Meghan Wares Ltd"}),      (c:Crop {name: "Beans"})    MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Meghan Wares Ltd"}),      (c:Crop {name: "Avocado"})  MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Rift Valley Processors"}),(c:Crop {name: "Maize"})    MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Rift Valley Processors"}),(c:Crop {name: "Potatoes"}) MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Lake Basin Exporters"}),  (c:Crop {name: "Avocado"})  MERGE (b)-[:BUYS]->(c)
-MATCH (b:Buyer {name: "Lake Basin Exporters"}),  (c:Crop {name: "Beans"})    MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Meghan Wares Ltd"}),       (c:Crop {name: "Tomatoes"}) MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Meghan Wares Ltd"}),       (c:Crop {name: "Beans"})    MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Meghan Wares Ltd"}),       (c:Crop {name: "Avocado"})  MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Rift Valley Processors"}), (c:Crop {name: "Maize"})    MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Rift Valley Processors"}), (c:Crop {name: "Potatoes"}) MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Lake Basin Exporters"}),   (c:Crop {name: "Avocado"})  MERGE (b)-[:BUYS]->(c);
+MATCH (b:Buyer {name: "Lake Basin Exporters"}),   (c:Crop {name: "Beans"})    MERGE (b)-[:BUYS]->(c);
 
 
 // ── STEP 8: KNOWS relationships (Farm → Buyer network) ───────
 
-MATCH (f:Farm {name: "Kamau Farm"}),   (b:Buyer {name: "Rift Valley Processors"}) MERGE (f)-[:KNOWS]->(b)
-MATCH (f:Farm {name: "Wanjiku Farm"}), (b:Buyer {name: "Meghan Wares Ltd"})       MERGE (f)-[:KNOWS]->(b)
-MATCH (f:Farm {name: "Auma Farm"}),    (b:Buyer {name: "Lake Basin Exporters"})   MERGE (f)-[:KNOWS]->(b)
-MATCH (f:Farm {name: "Auma Farm"}),    (b:Buyer {name: "Meghan Wares Ltd"})       MERGE (f)-[:KNOWS]->(b)
+MATCH (f:Farm {name: "Kamau Farm"}),   (b:Buyer {name: "Rift Valley Processors"}) MERGE (f)-[:KNOWS]->(b);
+MATCH (f:Farm {name: "Wanjiku Farm"}), (b:Buyer {name: "Meghan Wares Ltd"})       MERGE (f)-[:KNOWS]->(b);
+MATCH (f:Farm {name: "Auma Farm"}),    (b:Buyer {name: "Lake Basin Exporters"})   MERGE (f)-[:KNOWS]->(b);
+MATCH (f:Farm {name: "Auma Farm"}),    (b:Buyer {name: "Meghan Wares Ltd"})       MERGE (f)-[:KNOWS]->(b);
 MATCH (f:Farm {name: "Maina Farm"}),   (b:Buyer {name: "Rift Valley Processors"}) MERGE (f)-[:KNOWS]->(b);
 
 

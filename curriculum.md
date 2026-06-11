@@ -44,7 +44,7 @@ Add an AI layer to your graph. Learn how to connect your graph to an LLM using t
 - Create a vector index and run semantic similarity queries
 - Choose between Vector, Vector + Cypher, and Text-to-Cypher retrievers for different question types
 - Build a Vector + Cypher retriever using the `neo4j-graphrag` Python package
-- Use Featherless AI (free LLM hosting) as the inference layer
+- Connect GraphRAG to Google Gemini (free API via AI Studio)
 - Design the retriever strategy for your own project
 
 ---
@@ -68,6 +68,9 @@ Discover patterns in your graph that no single query can find. Apply graph algor
 | Tool | Purpose | Cost |
 |---|---|---|
 | [Neo4j AuraDB](https://console.neo4j.io) | Graph database | Free tier |
-| [Featherless AI](https://featherless.ai) | LLM inference | Free |
+| [Google Gemini API](https://aistudio.google.com) | LLM inference (Workshop 3) | Free tier |
+| [Featherless AI](https://featherless.ai) | LLM inference (hackathon partner) | Paid plans |
 | [Lovable](https://lovable.dev) | Frontend builder | Free tier |
 | [Masumi](https://masumi.network) | Agent payments | Partner |
+
+**Starter app:** `workshops/shamba/` — console project that builds the Workshop 3 pipeline step by step.

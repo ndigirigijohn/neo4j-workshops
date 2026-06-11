@@ -32,7 +32,7 @@ RETURN b.name, c.name
 ```cypher
 MATCH (b:Buyer)-[:BUYS]->(c:Crop)
 MATCH (f:Farm)-[:GROWS]->(c)
-MERGE (t:Transaction {
+CREATE (t:Transaction {
   id: randomUUID(),
   status: "pending",
   createdAt: datetime()
@@ -40,7 +40,7 @@ MERGE (t:Transaction {
 CREATE (f)-[:HAS_TRANSACTION]->(t)
 CREATE (t)-[:INVOLVES]->(b)
 CREATE (t)-[:FOR_CROP]->(c)
-RETURN count(t) AS transactionsCreated
+RETURN count(t) AS transactionsCreated;
 ```
 
 **Step 3 — Verify the new structure**
@@ -185,13 +185,21 @@ Look for `NodeIndexSeek` — the index is being used. Compare `db hits` before a
 
 Neo4j keeps pre-computed counts for node labels and relationship types. These are instant — no scan needed.
 
-```cypher
-// These hit the Count Store — instant at any scale
-MATCH (f:Farm) RETURN count(f) AS totalFarms
-MATCH ()-[r:GROWS]->() RETURN count(r) AS totalGrowsRelationships
+Run each of these as a separate statement:
 
-// This does NOT hit the Count Store — it scans after filtering
-MATCH (f:Farm) WHERE f.county = "Nakuru" RETURN count(f)
+```cypher
+// Hits the Count Store — instant at any scale
+MATCH (f:Farm) RETURN count(f) AS totalFarms;
+```
+
+```cypher
+// Also hits the Count Store
+MATCH ()-[r:GROWS]->() RETURN count(r) AS totalGrowsRelationships;
+```
+
+```cypher
+// Does NOT hit the Count Store — has to scan and filter
+MATCH (f:Farm) WHERE f.county = "Nakuru" RETURN count(f) AS farmsInNakuru;
 ```
 
 ---
@@ -266,6 +274,4 @@ MATCH ... WITH x, y  MATCH ... RETURN ...
 // Show indexes
 SHOW INDEXES
 
-// Drop a projection (GDS — next workshop)
-CALL gds.graph.drop('name')
 ```

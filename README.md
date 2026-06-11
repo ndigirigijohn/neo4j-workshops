@@ -34,6 +34,8 @@ Each workshop folder is published ahead of its session and contains:
 - Cypher scripts and seed data
 - Setup instructions (Workshop 1 only)
 
+**Workshop 3 starter:** `shamba/` — a console app (connect → embed → GraphRAG) that mirrors the session exercises.
+
 ---
 
 ## Resources
