@@ -5,11 +5,14 @@
 
 ## Before You Start
 
-**Starter project (optional):** `workshops/shamba/` is a console app that builds the same pipeline step by step. Exercises below map to Shamba Steps 2–5.
+**Starter project (optional):** [`workshops/shamba/`](../shamba/README.md) — console app with a virtual environment. See its README for setup. Exercises below map to Shamba Steps 2–5.
 
-**Install dependencies before the session** (run this in advance):
+**Install dependencies before the session** (use a virtual environment — see Shamba README):
 ```bash
-pip install neo4j neo4j-graphrag sentence-transformers openai
+cd workshops/shamba
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
 **Set environment variables** before running any Python:

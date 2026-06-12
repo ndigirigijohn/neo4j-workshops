@@ -1,0 +1,8 @@
+# Step 1 — connect to Aura
+neo4j>=5.0
+python-dotenv>=1.0
+
+# Steps 2–5 — embeddings + GraphRAG 
+sentence-transformers>=3.0,<4.0
+neo4j-graphrag>=1.0
+openai>=1.0,<2.0
