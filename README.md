@@ -32,7 +32,7 @@ Workshop resources for the Neo4j track of the Kenya AI Challenge 2026.
 Each workshop folder is published ahead of its session and contains:
 - Exercise handout
 - Cypher scripts and seed data
-- Setup instructions (Workshop 1 only)
+- Setup instructions (Workshop 1) or prerequisites (Workshop 3)
 
 **Workshop 3 starter:** [`shamba/`](shamba/README.md) — console app (connect → embed → GraphRAG). Uses a virtual environment; see its README for setup commands.
 
