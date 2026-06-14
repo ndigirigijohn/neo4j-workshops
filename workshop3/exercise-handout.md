@@ -68,13 +68,32 @@ You should see `crop_embeddings` with status `ONLINE` and 384 dimensions. If not
 ```python
 from sentence_transformers import SentenceTransformer
 from neo4j import GraphDatabase
+from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+# Load environment variables from .env
+PROJECT_ROOT = Path(__file__).resolve().parent
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Setup — runs once, driver and model are reused in Exercises 3, 4, 5
 model  = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 driver = GraphDatabase.driver(os.environ["NEO4J_URI"],
                               auth=(os.environ["NEO4J_USER"],
                                     os.environ["NEO4J_PASSWORD"]))
+
+# Adapter: wrap the SentenceTransformer so it exposes the
+# `embed_query(text)` method expected by `neo4j_graphrag` retrievers
+class SentenceTransformerEmbedder:
+    def __init__(self, model: SentenceTransformer):
+        self._model = model
+
+    def embed_query(self, text: str) -> list[float]:
+        emb = self._model.encode(text)
+        try:
+            return emb.tolist()
+        except Exception:
+            return [float(x) for x in emb]
 
 # Exercise 2 — Generate and Store Embeddings
 print("Exercise 2: Generating embeddings...")
@@ -92,6 +111,11 @@ with driver.session() as session:
             print(f"  Embedded: {crop['name']}")
 
 print("Done.")
+
+# Exercises 3, 4, 5 will be added here (before driver.close())
+
+driver.close()
+print("\nAll exercises complete.")
 ```
 
 **Run it from `workshops/shamba/`:**
@@ -114,7 +138,7 @@ All 7 crops should show 384 dimensions.
 
 ## Exercise 3 — Vector RAG: Search by Meaning
 
-**Add this code to the bottom of `workshops/shamba/exercises.py` (before `driver.close()`):**
+**Replace the line `# Exercises 3, 4, 5 will be added here (before driver.close())` in `workshops/shamba/exercises.py` with this code:**
 
 ```python
 # Exercise 3 — Vector RAG: Search by Meaning
@@ -124,7 +148,7 @@ from neo4j_graphrag.retrievers import VectorRetriever
 retriever = VectorRetriever(
     driver=driver,
     index_name="crop_embeddings",
-    embedder=model,
+    embedder=SentenceTransformerEmbedder(model),
     return_properties=["name", "description", "unit"]
 )
 
@@ -134,6 +158,8 @@ results = retriever.search(query_text=query, top_k=3)
 print(f"\nQuery: '{query}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
+
+# Exercise 4, 5 will be added here
 ```
 
 **Test it** — the query never mentions "Beans", but Beans should rank highest because its description is semantically close to "protein-rich" and "long shelf life."
@@ -146,7 +172,7 @@ Also try these queries (change the `query` variable and re-run):
 
 ## Exercise 4 — Vector + Cypher: Meaning AND Structure
 
-**Add this code to the bottom of `workshops/shamba/exercises.py` (before `driver.close()`):**
+**Replace the line `# Exercise 4, 5 will be added here` in `workshops/shamba/exercises.py` with this code:**
 
 This exercise builds on Exercise 3 by adding structured graph traversal to find market prices.
 
@@ -171,7 +197,7 @@ LIMIT 5
 vc_retriever = VectorCypherRetriever(
     driver=driver,
     index_name="crop_embeddings",
-    embedder=model,
+    embedder=SentenceTransformerEmbedder(model),
     retrieval_query=retrieval_query
 )
 
