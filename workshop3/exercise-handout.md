@@ -15,7 +15,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**Set environment variables** before running any Python:
+**Create `.env` first** in the `workshops/shamba` folder:
+```bash
+cd workshops/shamba
+cp .env.example .env
+```
+
+Edit `workshops/shamba/.env` with your Aura credentials.
+
+`workshops/shamba/main.py` now loads `.env` automatically, so you can run that script without exporting values again.
+
+If you run exercise scripts directly from the shell, make sure these variables are available in your environment:
 ```bash
 export NEO4J_URI="neo4j+s://your-instance.databases.neo4j.io"
 export NEO4J_USER="neo4j"

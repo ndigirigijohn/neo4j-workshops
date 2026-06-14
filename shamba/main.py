@@ -3,9 +3,13 @@
 
 import os
 import sys
+from pathlib import Path
 
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent
 
 
 def get_driver():
@@ -40,7 +44,7 @@ def list_crops(session) -> list[dict]:
 
 
 def main() -> None:
-    load_dotenv()
+    load_dotenv(PROJECT_ROOT / ".env")
 
     print("Shamba — agricultural graph console\n")
 

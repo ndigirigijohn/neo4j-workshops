@@ -45,6 +45,8 @@ First install may take a few minutes (`sentence-transformers` pulls PyTorch).
 cp .env.example .env
 ```
 
+`main.py` automatically loads `.env` from the `workshops/shamba` folder when you run the app.
+
 Edit `.env` with your Aura credentials:
 
 | Variable | Required | When |
