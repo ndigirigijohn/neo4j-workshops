@@ -30,7 +30,11 @@ driver = GraphDatabase.driver(os.environ["NEO4J_URI"],
 
 # Single place to change the user query used by Exercises 3, 4 and 5
 USER_QUERY = os.environ.get("SHAMBA_USER_QUERY") or (
-    "I need a protein-rich crop that keeps well. Where in Nairobi?"
+    """
+Nahitaji mboga ya kupika ugali kutoka kwa shamba iliyo karibu na mimi; niko Kiambu.
+Napenda kujua aina zinazopendekezwa, jinsi zinavyopakiwa/uzito wa kuuza, na bei za kawaida
+ili niandae usafirishaji na uhifadhi.
+"""
 )
 
 # Exercise 2 — Generate and Store Embeddings
@@ -108,7 +112,8 @@ from neo4j_graphrag.llm import OpenAILLM
 from neo4j_graphrag.generation import GraphRAG
 llm = OpenAILLM(
     model_name="gemini-2.5-flash",
-    model_params={"max_tokens": 300},
+    # Increase max_tokens so the LLM can return a paragraph or two
+    model_params={"max_tokens": 512},
     api_key=os.environ.get("GOOGLE_API_KEY"),
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
