@@ -151,11 +151,9 @@ retriever = VectorRetriever(
     embedder=SentenceTransformerEmbedder(model),
     return_properties=["name", "description", "unit"]
 )
+results = retriever.search(query_text=USER_QUERY, top_k=3)
 
-query   = "I need a protein-rich crop with a long shelf life"
-results = retriever.search(query_text=query, top_k=3)
-
-print(f"\nQuery: '{query}'")
+print(f"\nQuery: '{USER_QUERY}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
 
@@ -175,6 +173,10 @@ Also try these queries (change the `query` variable and re-run):
 **Replace the line `# Exercise 4, 5 will be added here` in `workshops/shamba/exercises.py` with this code:**
 
 This exercise builds on Exercise 3 by adding structured graph traversal to find market prices.
+
+# Note: set `USER_QUERY` at the top of `exercises.py` to control the query used
+# by Exercises 3, 4 and 5. You can also set the environment variable
+# `SHAMBA_USER_QUERY` before running the script to override the default.
 
 ```python
 # Exercise 4 — Vector + Cypher: Meaning AND Structure
@@ -201,10 +203,9 @@ vc_retriever = VectorCypherRetriever(
     retrieval_query=retrieval_query
 )
 
-query = "I need a protein-rich crop for long-distance transport"
-results = vc_retriever.search(query_text=query, top_k=3)
+results = vc_retriever.search(query_text=USER_QUERY, top_k=3)
 
-print(f"\nQuery: '{query}'")
+print(f"\nQuery: '{USER_QUERY}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
     print("---")
@@ -243,7 +244,7 @@ llm = OpenAILLM(
 
 rag      = GraphRAG(retriever=vc_retriever, llm=llm)
 response = rag.search(
-    query_text="I need a protein-rich crop that keeps well. Where in Nairobi?",
+    query_text=USER_QUERY,
     retriever_config={"top_k": 3}
 )
 

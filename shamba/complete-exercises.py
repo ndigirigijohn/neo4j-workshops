@@ -28,6 +28,11 @@ driver = GraphDatabase.driver(os.environ["NEO4J_URI"],
                               auth=(os.environ["NEO4J_USER"],
                                     os.environ["NEO4J_PASSWORD"]))
 
+# Single place to change the user query used by Exercises 3, 4 and 5
+USER_QUERY = os.environ.get("SHAMBA_USER_QUERY") or (
+    "I need a protein-rich crop that keeps well. Where in Nairobi?"
+)
+
 # Exercise 2 — Generate and Store Embeddings
 print("Exercise 2: Generating embeddings...")
 with driver.session() as session:
@@ -56,10 +61,9 @@ retriever = VectorRetriever(
     return_properties=["name", "description", "unit"]
 )
 
-query   = "I need a protein-rich crop with a long shelf life"
-results = retriever.search(query_text=query, top_k=3)
+results = retriever.search(query_text=USER_QUERY, top_k=3)
 
-print(f"\nQuery: '{query}'")
+print(f"\nQuery: '{USER_QUERY}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
 
@@ -88,10 +92,9 @@ vc_retriever = VectorCypherRetriever(
     retrieval_query=retrieval_query
 )
 
-query = "I need a protein-rich crop for long-distance transport"
-results = vc_retriever.search(query_text=query, top_k=3)
+results = vc_retriever.search(query_text=USER_QUERY, top_k=3)
 
-print(f"\nQuery: '{query}'")
+print(f"\nQuery: '{USER_QUERY}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
     print("---")
@@ -112,7 +115,7 @@ llm = OpenAILLM(
 
 rag      = GraphRAG(retriever=vc_retriever, llm=llm)
 response = rag.search(
-    query_text="I need a protein-rich crop that keeps well. Where in Nairobi?",
+    query_text=USER_QUERY,
     retriever_config={"top_k": 3}
 )
 
