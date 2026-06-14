@@ -229,23 +229,20 @@ print("\nExercise 5: LLM synthesis...")
 import os
 from neo4j_graphrag.llm import OpenAILLM
 from neo4j_graphrag.generation import GraphRAG
-from openai import OpenAI
 
-client = OpenAI(
-    api_key=os.environ["GOOGLE_API_KEY"],
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-)
-
+# Initialize OpenAILLM by passing OpenAI client kwargs directly. Increase
+# `max_tokens` if you want longer answers (watch model token limits).
 llm = OpenAILLM(
-    openai_client=client,
     model_name="gemini-2.5-flash",
-    model_params={"max_tokens": 300}
+    model_params={"max_tokens": 512},
+    api_key=os.environ.get("GOOGLE_API_KEY"),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 
-rag      = GraphRAG(retriever=vc_retriever, llm=llm)
+rag = GraphRAG(retriever=vc_retriever, llm=llm)
 response = rag.search(
     query_text=USER_QUERY,
-    retriever_config={"top_k": 3}
+    retriever_config={"top_k": 3},
 )
 
 print(f"\nAnswer:\n{response.answer}")
