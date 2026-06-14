@@ -35,18 +35,15 @@ export GOOGLE_API_KEY="your-key"  # free at aistudio.google.com — no credit ca
 
 **Run the seed script** to set up the starting graph. Paste `data/seed.cypher` into your Neo4j Aura query tab.
 
-> **Note — Python exercises (2–5) build on each other.** Run them in a single Python session (Jupyter notebook, interactive shell, or one script). The `driver` and `model` created in Exercise 2 are reused in Exercises 3, 4, and 5 — do not close the driver between exercises.
+> **Note — Python exercises (2–5) build on each other.** Run them in a single Python session using the shamba environment. The `driver` and `model` created in Exercise 2 are reused in Exercises 3, 4, and 5 — do not close the driver between exercises.
 
-Confirm it loaded:
-```cypher
-MATCH (n)-[r]->(m)
-RETURN labels(n)[0] AS from, type(r) AS rel, labels(m)[0] AS to, count(*) AS count
-ORDER BY from, rel
-```
+**All exercises run in `workshops/shamba/`** — this is where your `.env` file is, so environment variables load automatically. Create all exercise code in this folder.
 
 ---
 
 ## Exercise 1 — Check Descriptions and Vector Index
+
+**Cypher only — run in Neo4j Aura Browser.**
 
 The seed script added descriptions to all 7 crops and created the vector index. Verify both before writing Python.
 
@@ -54,10 +51,10 @@ The seed script added descriptions to all 7 crops and created the vector index. 
 // Check descriptions
 MATCH (c:Crop)
 RETURN c.name, c.description
-ORDER BY c.name
+ORDER BY c.name;
 
 // Check vector index is ONLINE
-SHOW VECTOR INDEXES
+SHOW VECTOR INDEXES;
 ```
 
 You should see `crop_embeddings` with status `ONLINE` and 384 dimensions. If not — re-run the seed script.
@@ -66,18 +63,21 @@ You should see `crop_embeddings` with status `ONLINE` and 384 dimensions. If not
 
 ## Exercise 2 — Generate and Store Embeddings
 
-Save as `embed_crops.py` and run it:
+**In `workshops/shamba/`, create a file called `exercises.py` and add this code:**
 
 ```python
 from sentence_transformers import SentenceTransformer
 from neo4j import GraphDatabase
 import os
 
+# Setup — runs once, driver and model are reused in Exercises 3, 4, 5
 model  = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 driver = GraphDatabase.driver(os.environ["NEO4J_URI"],
                               auth=(os.environ["NEO4J_USER"],
                                     os.environ["NEO4J_PASSWORD"]))
 
+# Exercise 2 — Generate and Store Embeddings
+print("Exercise 2: Generating embeddings...")
 with driver.session() as session:
     crops = session.run(
         "MATCH (c:Crop) RETURN c.name AS name, c.description AS desc"
@@ -92,15 +92,20 @@ with driver.session() as session:
             print(f"  Embedded: {crop['name']}")
 
 print("Done.")
-# Keep driver and model open — used in Exercises 3, 4, and 5
 ```
 
-> First run downloads the model (~90MB). Subsequent runs are instant.
+**Run it from `workshops/shamba/`:**
+```bash
+python exercises.py
+```
 
-Verify embeddings stored:
+> First run downloads the model (~90MB). Subsequent runs are instant. Your `.env` file is automatically loaded.
+
+**Verify embeddings stored** (Cypher in Aura Browser):
 ```cypher
 MATCH (c:Crop) WHERE c.embedding IS NOT NULL
 RETURN c.name, size(c.embedding) AS dimensions
+ORDER BY c.name;
 ```
 
 All 7 crops should show 384 dimensions.
@@ -109,7 +114,11 @@ All 7 crops should show 384 dimensions.
 
 ## Exercise 3 — Vector RAG: Search by Meaning
 
+**Add this code to the bottom of `workshops/shamba/exercises.py` (before `driver.close()`):**
+
 ```python
+# Exercise 3 — Vector RAG: Search by Meaning
+print("\nExercise 3: Vector search...")
 from neo4j_graphrag.retrievers import VectorRetriever
 
 retriever = VectorRetriever(
@@ -122,13 +131,14 @@ retriever = VectorRetriever(
 query   = "I need a protein-rich crop with a long shelf life"
 results = retriever.search(query_text=query, top_k=3)
 
+print(f"\nQuery: '{query}'")
 for i, r in enumerate(results.items, 1):
     print(f"{i}. {r.content}")
 ```
 
-The query never mentions "Beans" — but Beans should rank highest because its description is semantically close to "protein-rich" and "long shelf life."
+**Test it** — the query never mentions "Beans", but Beans should rank highest because its description is semantically close to "protein-rich" and "long shelf life."
 
-Also try:
+Also try these queries (change the `query` variable and re-run):
 - `"I need a leafy vegetable for a hotel kitchen"` → expect Sukuma Wiki
 - `"Drought-resistant crop for dry regions"` → expect Sorghum
 
@@ -136,9 +146,13 @@ Also try:
 
 ## Exercise 4 — Vector + Cypher: Meaning AND Structure
 
-This retriever combines semantic search with a structured graph traversal — same crop matching, but now including live market prices.
+**Add this code to the bottom of `workshops/shamba/exercises.py` (before `driver.close()`):**
+
+This exercise builds on Exercise 3 by adding structured graph traversal to find market prices.
 
 ```python
+# Exercise 4 — Vector + Cypher: Meaning AND Structure
+print("\nExercise 4: Vector + Cypher search...")
 from neo4j_graphrag.retrievers import VectorCypherRetriever
 
 retrieval_query = """
@@ -161,25 +175,30 @@ vc_retriever = VectorCypherRetriever(
     retrieval_query=retrieval_query
 )
 
-results = vc_retriever.search(
-    query_text="I need a protein-rich crop for long-distance transport",
-    top_k=3
-)
+query = "I need a protein-rich crop for long-distance transport"
+results = vc_retriever.search(query_text=query, top_k=3)
 
-for r in results.items:
-    print(r.content)
+print(f"\nQuery: '{query}'")
+for i, r in enumerate(results.items, 1):
+    print(f"{i}. {r.content}")
     print("---")
 ```
 
-Compare this output to Exercise 3. The same crops appear — but now each result includes the market name, location, and price. That's the Cypher traversal.
+**Compare to Exercise 3** — the same crops appear, but now each result includes the market name, location, and price. That's the Cypher traversal in action.
+
+Note: `vc_retriever` is saved for use in Exercise 5.
 
 ---
 
 ## Exercise 5 — Connect to an LLM (Google Gemini)
 
-Gemini exposes an OpenAI-compatible API — same `OpenAILLM` class, different endpoint.
+**Add this code to the bottom of `workshops/shamba/exercises.py` (before `driver.close()`):**
+
+This exercise uses the LLM to synthesize search results into a natural language answer.
 
 ```python
+# Exercise 5 — LLM Synthesis (Google Gemini)
+print("\nExercise 5: LLM synthesis...")
 import os
 from neo4j_graphrag.llm import OpenAILLM
 from neo4j_graphrag.generation import GraphRAG
@@ -202,11 +221,35 @@ response = rag.search(
     retriever_config={"top_k": 3}
 )
 
-print(response.answer)
+print(f"\nAnswer:\n{response.answer}")
 ```
 
-Expected answer (approximate):
+**Expected output** (approximate):
 > *"Based on current listings, Beans are a strong match — high protein, long shelf life. They are currently listed at Wakulima Market in Nairobi at KSh 7,200 per 90kg bag."*
+
+---
+
+## Cleanup — Close the Driver
+
+**At the very end of `workshops/shamba/exercises.py`, add:**
+
+```python
+driver.close()
+print("\nAll exercises complete.")
+```
+
+---
+
+## Running All Exercises
+
+Once you've added all exercise code to `workshops/shamba/exercises.py`, run it:
+
+```bash
+cd workshops/shamba
+python exercises.py
+```
+
+The output will show each exercise running in sequence: embeddings → vector search → vector+Cypher → LLM synthesis.
 
 ---
 
@@ -214,7 +257,7 @@ Expected answer (approximate):
 
 *Facilitator-led — no hands-on today. For reference after the session.*
 
-Text-to-Cypher lets the LLM generate a Cypher query from plain English and execute it directly against your graph.
+Text-to-Cypher lets the LLM generate a Cypher query from plain English and execute it directly against your graph. You can try this after the workshop if interested.
 
 ```python
 from neo4j_graphrag.retrievers import Text2CypherRetriever
