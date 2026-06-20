@@ -119,10 +119,10 @@ SET greenleaf.county = "Nairobi", greenleaf.type = "Hospitality"
 MERGE (coastpacker:Buyer {name: "Coast Packers"})
 SET coastpacker.county = "Mombasa", coastpacker.type = "Exporter";
 
-MATCH (b:Buyer {name: "Meghan Wares Ltd"})       SET b:Wholesaler
-MATCH (b:Buyer {name: "Rift Valley Processors"}) SET b:Processor
-MATCH (b:Buyer {name: "Lake Basin Exporters"})   SET b:Exporter
-MATCH (b:Buyer {name: "Greenleaf Hotels"})       SET b:Hospitality
+MATCH (b:Buyer {name: "Meghan Wares Ltd"})       SET b:Wholesaler;
+MATCH (b:Buyer {name: "Rift Valley Processors"}) SET b:Processor;
+MATCH (b:Buyer {name: "Lake Basin Exporters"})   SET b:Exporter;
+MATCH (b:Buyer {name: "Greenleaf Hotels"})       SET b:Hospitality;
 MATCH (b:Buyer {name: "Coast Packers"})          SET b:Exporter;
 
 
